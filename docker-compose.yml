@@ -1,0 +1,43 @@
+services:
+  dbt:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dbt
+    volumes:
+      - ./dbt:/app
+    depends_on:
+      - postgres
+    command: dbt run
+
+  postgres:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crypto
+
+  superset:
+    image: apache/superset:latest
+    container_name: superset
+    ports:
+      - "8088:8088"
+    environment:
+      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
+      - PYTHONPATH=/app/pythonpath
+    volumes:
+      - ./superset_home:/app/superset_home
+    depends_on:
+      - postgres
+    command: >
+      /bin/sh -c "
+        superset db upgrade &&
+        superset fab create-admin
+          --username ${SUPERSET_ADMIN_USERNAME}
+          --firstname ${SUPERSET_ADMIN_FIRSTNAME}
+          --lastname ${SUPERSET_ADMIN_LASTNAME}
+          --email ${SUPERSET_ADMIN_EMAIL}
+          --password ${SUPERSET_ADMIN_PASSWORD} &&
+        superset init &&
+        superset run -h 0.0.0.0 -p 8088"

@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: raw_crypto_prices
+
+models:
+  - name: stg_crypto_prices
+    description: "Cleaned prices for each coin from CoinGecko"
+    columns:
+      - name: coin_id
+        description: "Coin name"
+      - name: timestamp
+        description: "UTC timestamp of the price snapshot"
+      - name: price_usd
+        description: "Price in USD"
+  - name: int_crypto_metrics
+    description: "Adds price % change and rolling average over 7 days"
+    columns:
+      - name: price_change_pct
+        description: "Percent change from previous day"
+      - name: rolling_avg_7d
+        description: "7-day rolling average of price"
+  - name: mart_top_coins
+    description: "Top 5 coins by average 7-day rolling price"
+
+columns:
+  - name: coin_id
+    tests:
+      - not_null
+  - name: timestamp
+    tests:
+      - not_null
+  - name: price_usd
+    tests:
+      - not_null
+      - accepted_range:
+          min_value: 0

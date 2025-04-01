@@ -1,0 +1,5 @@
+FROM ghcr.io/dbt-labs/dbt-postgres:1.6.6
+
+WORKDIR /app
+COPY . /app
+RUN dbt deps
