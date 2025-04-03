@@ -4,3 +4,4 @@ __pycache__/
 superset_home/
 dbt/target/
 dbt/dbt_packages/
+dbt/target/user.yml
