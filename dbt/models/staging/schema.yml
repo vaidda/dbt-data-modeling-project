@@ -4,6 +4,7 @@ sources:
   - name: public
     tables:
       - name: raw_crypto_prices
+      - name: ingestion_runs
 
 models:
   - name: stg_crypto_prices
@@ -31,6 +32,15 @@ models:
         tests:
           - not_null
       - name: run_ts
+        tests:
+          - not_null
+  - name: mart_top_gainers_weekly
+    description: "Weekly top gaining coins by % price increase"
+    columns:
+      - name: coin_id
+        tests:
+          - not_null
+      - name: week_start
         tests:
           - not_null
 
