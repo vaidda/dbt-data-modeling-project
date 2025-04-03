@@ -24,6 +24,15 @@ models:
         description: "7-day rolling average of price"
   - name: mart_top_coins
     description: "Top 5 coins by average 7-day rolling price"
+  - name: stg_ingestion_runs
+    description: "Tracks ingestion history by coin and date range"
+    columns:
+      - name: coin_id
+        tests:
+          - not_null
+      - name: run_ts
+        tests:
+          - not_null
 
 columns:
   - name: coin_id
