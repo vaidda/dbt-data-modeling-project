@@ -1,5 +1,5 @@
 with base as (
-    select * from "postgres"."public"."int_crypto_metrics"
+    select * from "crypto"."public"."int_crypto_metrics"
 ),
 
 recent_data as (

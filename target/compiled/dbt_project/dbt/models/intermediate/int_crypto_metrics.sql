@@ -1,5 +1,5 @@
 with base as (
-    select * from "postgres"."public_staging"."stg_crypto_prices"
+    select * from "crypto"."public_staging"."stg_crypto_prices"
 ),
 
 with_changes as (

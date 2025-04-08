@@ -1,5 +1,5 @@
 with source as (
-    select * from "postgres"."public"."raw_crypto_prices"
+    select * from "crypto"."public"."raw_crypto_prices"
 ),
 
 renamed as (

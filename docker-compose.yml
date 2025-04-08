@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.dbt
+    env_file:
+      - .env
     volumes:
       - ./dbt:/app
     depends_on:
@@ -14,6 +16,8 @@ services:
     image: postgres:14
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -38,3 +42,18 @@ services:
                   superset fab create-admin --username $$SUPERSET_ADMIN_USERNAME --firstname $$SUPERSET_ADMIN_FIRSTNAME --lastname $$SUPERSET_ADMIN_LASTNAME --email $$SUPERSET_ADMIN_EMAIL --password $$SUPERSET_ADMIN_PASSWORD &&
                   superset init &&
                   superset run -h 0.0.0.0 -p 8088"
+
+  ingestion:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ingestion
+    volumes:
+      - ./ingestion:/app
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    command: python ingestion/fetch_prices.py
+
+volumes:
+  pgdata:
